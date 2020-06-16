@@ -2,7 +2,6 @@ import React from "react";
 
 export default function WeatherCard(item) {
   const date = new Date(item.dt * 1000);
-
   let year = date.getFullYear();
   let month = date.getMonth();
   let day = date.getDate();

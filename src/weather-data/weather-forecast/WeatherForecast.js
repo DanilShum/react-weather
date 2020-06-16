@@ -8,7 +8,7 @@ export default function WeatherForecast() {
     <div className="weather__forecast">
       <h3 className="weather__forecast-title"></h3>
       {itemForecast(dataWeatherForecast.hourly, (item) => (
-        <WeatherCard {...item} />
+        <WeatherCard {...item} key={item.dt}/>
       ))}
     </div>
   );

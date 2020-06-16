@@ -3,18 +3,23 @@ import React, { useState, useEffect } from "react";
 import WeatherData from "weather-data/WeatherData";
 import Context from "context";
 import axios from "axios";
+import listCity from './city.list.json'
 
 function App() {
   const [loading, setLoading] = useState(false);
   const [dataWeather, setDataWeather] = useState();
   const [dataWeatherForecast, setDataWeatherForecast] = useState();
   const [valueSerch, setValueSerch] = useState("");
-
+ 
+  let lat = 55.7480817
+  let lon = 37.59
+  
+  
   function fetchData() {
     setLoading(true);
     axios
       .get(
-        "https://api.openweathermap.org/data/2.5/weather?lat=55.7480817&lon=37.59&dt=1586468027&units=metric&appid=40027024443402de9525844b900358ab"
+        "https://api.openweathermap.org/data/2.5/weather?lat="+lat+"&lon="+lon+"&dt=1586468027&units=metric&appid=40027024443402de9525844b900358ab"
       )
       .then(function (response) {
         setDataWeather(response.data);
@@ -29,7 +34,7 @@ function App() {
     setLoading(true);
     axios
       .get(
-        "https://api.openweathermap.org/data/2.5/onecall?lat=55.7480817&lon=37.59&exclude=current&units=metric&appid=40027024443402de9525844b900358ab"
+        "https://api.openweathermap.org/data/2.5/onecall?lat="+lat+"&lon="+lon+"&exclude=current&units=metric&appid=40027024443402de9525844b900358ab"
       )
       .then(function (response) {
         setDataWeatherForecast(response.data);
@@ -40,7 +45,7 @@ function App() {
       .finally(() => setLoading(false));
   }
 
-  function searhCity() {
+  function loadingData() {
     console.log(dataWeather);
     console.log(dataWeatherForecast);
     fetchData();
@@ -55,11 +60,28 @@ function App() {
     return newArr;
   }
 
+  function filterFunc(func){
+    for(let i = 0; i < listCity.length; i++){
+     func(listCity[i], i)
+    }
+  }
+
+  function searchCity(item, index, arr){
+    if(valueSerch === item.name){
+      lon = item.coord.lon
+      lat = item.coord.lat
+      console.log(lon,lat)
+      loadingData()
+    }
+  }
+
+  
+
   return (
     <Context.Provider
       value={{
         fetchData,
-        searhCity,
+        loadingData,
         dataWeather,
         dataWeatherForecast,
         valueSerch,
@@ -75,7 +97,7 @@ function App() {
             onChange={(evt) => setValueSerch(evt.target.value)}
             onKeyDown={(evt) => {
               if (evt.key === "Enter") {
-                searhCity();
+                filterFunc(searchCity);
               }
             }}
             type="text"
