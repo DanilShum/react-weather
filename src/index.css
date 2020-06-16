@@ -5,6 +5,8 @@ body {
     sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
+  color: #ffffff;
+  font-size: 20px;
 }
 
 code {
@@ -14,4 +16,45 @@ code {
 .weather {
   margin: 0 auto;
   padding: 20px;
+  height: 100vh;
+  background: url(../src/2850815.246c1201.jpg) no-repeat 50% ;
+  background-size: cover;
+}
+.weather__info-content {
+  display: flex;
+  justify-content: space-between;
+}
+
+.weather__info-teperature {
+  display: flex;
+}
+
+.weather__info-full {
+  display: flex;
+  flex-wrap: wrap;
+  background: rgba(255, 255, 255, 0.4);
+  justify-content: space-between;
+
+  max-width: 50%;
+  list-style: none;
+  padding: 5px;
+  border-radius: 5px;
+}
+.weather__info-full li {
+  margin: 5px;
+  text-align: center;
+  flex-basis: calc(25%);
+}
+.weather__forecast {
+  display: flex;
+  overflow: auto;
+}
+.weather__card {
+  background: rgba(255, 255, 255, 0.4);
+  border-radius: 5px;
+}
+
+.weather__card:not(:first-child),
+.weather__card:not(:first-child) {
+  margin: 0 5px;
 }

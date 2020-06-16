@@ -1,12 +1,15 @@
-import React from 'react'
-import WeatherCard from './weather-card/WeatherCard'
+import React, { useContext } from "react";
+import WeatherCard from "./weather-card/WeatherCard";
+import Context from "context";
 
-export default function WeatherForecast(){
-    return (
-        <div className="weather__forecast">
-            <h3 className="weather__forecast-title"></h3>
-            <WeatherCard/>
-        </div>
-    )
+export default function WeatherForecast() {
+  const { dataWeatherForecast, itemForecast } = useContext(Context);
+  return (
+    <div className="weather__forecast">
+      <h3 className="weather__forecast-title"></h3>
+      {itemForecast(dataWeatherForecast.hourly, (item) => (
+        <WeatherCard {...item} />
+      ))}
+    </div>
+  );
 }
-
