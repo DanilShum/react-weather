@@ -20,41 +20,35 @@ code {
   background: url(../src/2850815.246c1201.jpg) no-repeat 50% ;
   background-size: cover;
 }
-.weather__info-content {
+.weather__logo {
+  font-size: 42px;
+  font-weight: 400;
+}
+.weather__search {
   display: flex;
-  justify-content: space-between;
+  justify-content: center;
 }
 
-.weather__info-teperature {
-  display: flex;
-}
-
-.weather__info-full {
-  display: flex;
-  flex-wrap: wrap;
-  background: rgba(255, 255, 255, 0.4);
-  justify-content: space-between;
-
-  max-width: 50%;
-  list-style: none;
+.weather__search input {
+  width: 60%;
+  height: 35px;
   padding: 5px;
-  border-radius: 5px;
-}
-.weather__info-full li {
-  margin: 5px;
+  border-radius: 52px;
+  border: none;
+  outline: none;
   text-align: center;
-  flex-basis: calc(25%);
+  font-size: 26px;
 }
-.weather__forecast {
-  display: flex;
-  overflow: auto;
-}
-.weather__card {
-  background: rgba(255, 255, 255, 0.4);
-  border-radius: 5px;
+.weather__search input:focus {
+  box-shadow: 0 5px 5px rgb(143, 142, 142);
 }
 
-.weather__card:not(:first-child),
-.weather__card:not(:first-child) {
-  margin: 0 5px;
+.notFound {
+  text-align: center;
+  width: 60%;
+  margin: 20px auto;
+  padding: 10px;
+  border-radius: 5px;
+  background: rgba(255,255,255,0.4);
+  
 }

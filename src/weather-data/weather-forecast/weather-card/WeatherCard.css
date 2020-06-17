@@ -1,0 +1,11 @@
+.weather__card {
+    background: rgba(255, 255, 255, 0.4);
+    border-radius: 5px;
+    padding: 5px;
+    text-align: center;
+}
+.weather__card:not(:first-child),
+.weather__card:not(:first-child) {
+  margin: 0 5px;
+}
+

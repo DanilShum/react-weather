@@ -1,0 +1,10 @@
+.weather__info-title {
+    font-size: 18px;
+}
+
+
+.weather__info-content {
+    display: flex;
+    justify-content: space-between;
+    margin: 20px 0px ;
+  }

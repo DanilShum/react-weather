@@ -1,30 +1,32 @@
-import React, { useState, useEffect } from "react";
+import React, { useState } from "react";
 
 import WeatherData from "weather-data/WeatherData";
 import Context from "context";
 import axios from "axios";
-import listCity from './city.list.json'
 
 function App() {
   const [loading, setLoading] = useState(false);
   const [dataWeather, setDataWeather] = useState();
   const [dataWeatherForecast, setDataWeatherForecast] = useState();
   const [valueSerch, setValueSerch] = useState("");
- 
-  let lat = 55.7480817
-  let lon = 37.59
-  
-  
+  const [errorSrc, setErrorSrc] = useState(false)
+
+  let city;
+
   function fetchData() {
     setLoading(true);
     axios
       .get(
-        "https://api.openweathermap.org/data/2.5/weather?lat="+lat+"&lon="+lon+"&dt=1586468027&units=metric&appid=40027024443402de9525844b900358ab"
+        "https://api.openweathermap.org/data/2.5/weather?q=" +
+          city +
+          "&dt=1586468027&units=metric&appid=40027024443402de9525844b900358ab"
       )
       .then(function (response) {
+        setErrorSrc(false)
         setDataWeather(response.data);
       })
       .catch(function (error) {
+        setErrorSrc(true)
         console.log(error);
       })
       .finally(() => setLoading(false));
@@ -34,7 +36,9 @@ function App() {
     setLoading(true);
     axios
       .get(
-        "https://api.openweathermap.org/data/2.5/onecall?lat="+lat+"&lon="+lon+"&exclude=current&units=metric&appid=40027024443402de9525844b900358ab"
+        "https://api.openweathermap.org/data/2.5/forecast?q=" +
+          city +
+          "&exclude=current&units=metric&appid=40027024443402de9525844b900358ab"
       )
       .then(function (response) {
         setDataWeatherForecast(response.data);
@@ -46,36 +50,14 @@ function App() {
   }
 
   function loadingData() {
-    console.log(dataWeather);
-    console.log(dataWeatherForecast);
     fetchData();
     forecastData();
   }
 
-  function itemForecast(arr, func) {
-    let newArr = [];
-    for (let i = 1; i < arr.length; i++) {
-      newArr.push(func(arr[i], i, arr));
-    }
-    return newArr;
+  function searchCity() {
+    city = valueSerch;
+    loadingData();
   }
-
-  function filterFunc(func){
-    for(let i = 0; i < listCity.length; i++){
-     func(listCity[i], i)
-    }
-  }
-
-  function searchCity(item, index, arr){
-    if(valueSerch === item.name){
-      lon = item.coord.lon
-      lat = item.coord.lat
-      console.log(lon,lat)
-      loadingData()
-    }
-  }
-
-  
 
   return (
     <Context.Provider
@@ -86,7 +68,6 @@ function App() {
         dataWeatherForecast,
         valueSerch,
         setValueSerch,
-        itemForecast,
       }}
     >
       <section className="weather">
@@ -97,15 +78,19 @@ function App() {
             onChange={(evt) => setValueSerch(evt.target.value)}
             onKeyDown={(evt) => {
               if (evt.key === "Enter") {
-                filterFunc(searchCity);
+                searchCity();
               }
             }}
             type="text"
             placeholder="Your city"
           />
         </label>
-        {dataWeather && dataWeatherForecast && <WeatherData />}
-      </section>
+        {errorSrc ? (
+          <div className="notFound">Sorry, no such city was found</div>
+        ) : (
+          dataWeather && dataWeatherForecast && <WeatherData />
+        )}
+       </section>
     </Context.Provider>
   );
 }

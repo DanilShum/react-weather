@@ -1,0 +1,5 @@
+.weather__forecast {
+    display: flex;
+    overflow: auto;
+    padding-bottom: 10px;
+  }

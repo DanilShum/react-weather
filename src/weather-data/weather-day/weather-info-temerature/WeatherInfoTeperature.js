@@ -1,7 +1,8 @@
 import React,{useContext} from 'react'
 import Context from "context"
+import './WeatherInfoTeperature.css'
 
-export default function WeatherInfoTeperature(){
+function WeatherInfoTeperature(){
     const {dataWeather} = useContext(Context)
     
     let temp = dataWeather.main.temp
@@ -15,11 +16,14 @@ export default function WeatherInfoTeperature(){
                 <img src= {src} alt={stateDescription}/>
             </div>
             <div className="weather__info-teperature-wrapper">
-                <p> {temp} <sup>o</sup> </p>
+                <div className="weather__current-temperature">{temp} <sup>o</sup></div> 
                 <p> {stateDescription} </p>
             </div>
         </div>
     )
 
 }
+
+
+export default React.memo(WeatherInfoTeperature);
 
