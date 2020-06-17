@@ -1,16 +1,11 @@
-import React,{useContext} from 'react'
+import React from 'react'
 import WeatherInfoTeperature from './weather-info-temerature/WeatherInfoTeperature'
 import WeatherInfoFull from './weather__info-full/WeatherInfoFull'
+import './WeatherInfoDay.css'
 
 export default function WeatherInfoDay(){
-   
-    const date = new Date();
-    const day = ['Воскресенье','Понедельник','Вторник','Среда','Четверг','Пятница','Суббота']
-    const month = ['Января' , 'Февраля' , 'Марта' , 'Апрелья' , 'Майя' , 'Июнья' , 'Июлья' , 'Августа' , 'Сентябрья' , 'Октябрья' , 'Ноябрья' , 'Декабрья' ]
-    let today = day[date.getDay()]
-    let currentMonth = month[date.getMonth()]    
     
-    let currentDay = [today,' ',date.getDate(),' ',currentMonth]
+    let currentDay = new Date().toLocaleString('ru', { day: 'numeric', month: 'long', weekday: 'long' })
 
     return (
         <div className="weather__info">
@@ -19,7 +14,6 @@ export default function WeatherInfoDay(){
                 <WeatherInfoTeperature/>
                 <WeatherInfoFull/>
             </div>
-           
         </div>
     )
 }
