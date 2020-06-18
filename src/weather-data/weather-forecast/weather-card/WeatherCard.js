@@ -2,23 +2,22 @@ import React from "react";
 import "./WeatherCard.css";
 
 export default function WeatherCard(item) {
-  const date = new Date(item.dt * 1000);
-  let year = date.getFullYear();
-  let month = date.getMonth();
-  let day = date.getDate();
-  let hours = date.getHours();
-
-  let temp = item.main.temp;
-  let iconDescription = item.weather[0].icon;
-  let src = "http://openweathermap.org/img/wn/" + iconDescription + "@2x.png";
-
+  const iconDescription = item.weather[0].icon;
+  const src = "http://openweathermap.org/img/wn/" + iconDescription + "@2x.png";
+  const temp = item.main.temp;
+  const forecastDate = new Date(item.dt_txt).toLocaleString("ru", {
+    day: "numeric",
+    month: "numeric",
+  });
+  const forecastTime = new Date(item.dt_txt).toLocaleString("ru", {
+    hour: "2-digit",
+    minute: "2-digit",
+  });
   return (
     <div className="weather__card">
-      <time>
-        {day}.{month + 1}.{year}
-      </time>
+      <time>{forecastDate}</time>
       <br />
-      <time>{hours}:00</time>
+      <time>{forecastTime}</time>
       <div className="weather__card-description">
         <img src={src} alt="state" />
       </div>

@@ -1,5 +1,4 @@
 import React, { useState } from "react";
-
 import WeatherData from "weather-data/WeatherData";
 import Context from "context";
 import axios from "axios";
@@ -9,24 +8,29 @@ function App() {
   const [dataWeather, setDataWeather] = useState();
   const [dataWeatherForecast, setDataWeatherForecast] = useState();
   const [valueSerch, setValueSerch] = useState("");
-  const [errorSrc, setErrorSrc] = useState(false)
+  const [errorSrc, setErrorSrc] = useState(false);
 
   let city;
 
   function fetchData() {
     setLoading(true);
+
     axios
-      .get(
-        "https://api.openweathermap.org/data/2.5/weather?q=" +
-          city +
-          "&dt=1586468027&units=metric&appid=40027024443402de9525844b900358ab"
-      )
+      .get("https://api.openweathermap.org/data/2.5/weather", {
+        params: {
+          q: valueSerch,
+          dt: 1586468027,
+          units: "metric",
+          appid: "40027024443402de9525844b900358ab",
+        },
+      })
       .then(function (response) {
-        setErrorSrc(false)
+        console.log(dataWeather);
+        setErrorSrc(false);
         setDataWeather(response.data);
       })
       .catch(function (error) {
-        setErrorSrc(true)
+        setErrorSrc(true);
         console.log(error);
       })
       .finally(() => setLoading(false));
@@ -38,9 +42,10 @@ function App() {
       .get(
         "https://api.openweathermap.org/data/2.5/forecast?q=" +
           city +
-          "&exclude=current&units=metric&appid=40027024443402de9525844b900358ab"
+          "&units=metric&appid=40027024443402de9525844b900358ab"
       )
       .then(function (response) {
+        console.log(dataWeatherForecast);
         setDataWeatherForecast(response.data);
       })
       .catch(function (error) {
@@ -71,8 +76,21 @@ function App() {
       }}
     >
       <section className="weather">
-        <h1 className="weather__logo">Weather</h1>
-        <label className="weather__search">
+        <h1
+          className={`weather__logo ${
+            !errorSrc && dataWeather && dataWeatherForecast && "translate"
+          }`}
+        >
+          Weather
+        </h1>
+        <label
+          className={`weather__search ${
+            !errorSrc &&
+            dataWeather &&
+            dataWeatherForecast &&
+            "weather__search-translate"
+          }`}
+        >
           <input
             value={valueSerch}
             onChange={(evt) => setValueSerch(evt.target.value)}
@@ -90,7 +108,7 @@ function App() {
         ) : (
           dataWeather && dataWeatherForecast && <WeatherData />
         )}
-       </section>
+      </section>
     </Context.Provider>
   );
 }

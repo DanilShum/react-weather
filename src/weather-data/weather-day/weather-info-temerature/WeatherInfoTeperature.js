@@ -16,7 +16,7 @@ function WeatherInfoTeperature(){
                 <img src= {src} alt={stateDescription}/>
             </div>
             <div className="weather__info-teperature-wrapper">
-                <div className="weather__current-temperature">{temp} <sup>o</sup></div> 
+                <div className="weather__current-temperature">{temp}°</div> 
                 <p> {stateDescription} </p>
             </div>
         </div>

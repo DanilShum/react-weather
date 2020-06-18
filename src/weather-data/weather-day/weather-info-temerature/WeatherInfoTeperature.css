@@ -1,12 +1,20 @@
 .weather__info-teperature {
     display: flex;
-    justify-content: space-between;
+    justify-content: center;
     align-items: center;
-}
+    flex: 2;
 
+}
+.weather__info-teperature-wrapper{
+    margin: 0 15px;
+}
 .weather__info-teperature-wrapper p{
     margin: 0;
 }
 .weather__current-temperature {
-    font-size: 48px;
+    font-size: 80px;
+}
+.weather__info-teperature-item {
+    margin: 0 15px;
+    transform: scale(2);
 }
