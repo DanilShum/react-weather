@@ -1,19 +1,18 @@
-import React, { useContext, useState, useEffect,useRef } from "react";
+import React, { useContext } from "react";
 import Context from "context";
 import "./WeatherGraph.css";
 import { Line } from "react-chartjs-2";
 
 export default function WeatherGraph() {
   const { dataWeatherForecast } = useContext(Context);
-  const [chartData, setChartData] = useState({});
+
   const arrTemp = [];
   const arrTime = [];
   const arrHumidity = [];
   const arrRain = [];
   const arrСlouds = [];
   const arrVisualTime = [];
-  // const lineRef = useRef()
-  // console.log(lineRef.current)
+
   dataWeatherForecast.list.forEach((item) => {
     arrTime.push(
       new Date(item.dt_txt).toLocaleString("ru", {
@@ -24,8 +23,6 @@ export default function WeatherGraph() {
       })
     );
   });
-
- 
 
   const currentTime = new Date();
   const arrNextDay = [];
@@ -73,25 +70,20 @@ export default function WeatherGraph() {
     );
   });
 
+  const data = (canvas) => {
+    console.log(canvas)
+    const ctx = canvas.getContext("2d");
+    const gradient = ctx.createLinearGradient(0, 0, 800, 0);
+    gradient.addColorStop(0, "rgba(100,155,200,0.5)");
+    gradient.addColorStop(1, "rgba(250,155,100,0.5)");
+    const gradient1 = ctx.createLinearGradient(0, 0, 800, 0);
+    gradient1.addColorStop(0, "rgba(126, 228, 246, 0.6)");
+    gradient1.addColorStop(1, "rgba(246,228,1226,0.6)");
+    const gradient2 = ctx.createLinearGradient(0, 0, 800, 0);
+    gradient2.addColorStop(0, "rgba(101, 124, 226, 0.6)");
+    gradient2.addColorStop(1, "rgba(50,50,50,0.5)");
 
-    
-
-  const chart = () => {
-    const ctx = document.getElementById('canvas').getContext("2d")
-    const gradient = ctx.createLinearGradient(0,0,800,0)
-    gradient.addColorStop(0, 'rgba(100,155,200,0.5)')
-    gradient.addColorStop(1,'rgba(250,155,100,0.5)')
-
-    const gradient1 = ctx.createLinearGradient(0,0,800,0)
-    gradient1.addColorStop(0, 'rgba(126, 228, 246, 0.6)')
-    gradient1.addColorStop(1,'rgba(246,228,1226,0.6)')
-
-    const gradient2 = ctx.createLinearGradient(0,0,800,0)
-    gradient2.addColorStop(0, 'rgba(101, 124, 226, 0.6)')
-    gradient2.addColorStop(1, 'rgba(50,50,50,0.5)')
-
-
-    setChartData({
+    return {
       labels: arrVisualTime,
       datasets: [
         {
@@ -101,7 +93,7 @@ export default function WeatherGraph() {
           borderWidth: 4,
           borderColor: ["rgba(209, 100, 100, 0.5)"],
           pointBorderColor: "rgba(209, 100, 100, 0.5)",
-        }, 
+        },
         {
           label: "Сlouds %",
           data: arrСlouds,
@@ -127,21 +119,15 @@ export default function WeatherGraph() {
           pointBorderColor: "rgba(64, 63, 63, 0.5)",
         },
       ],
-    });
+    };
   };
 
-  useEffect(() => {
-    chart();
-  }, [dataWeatherForecast]);
-
   return (
-    <div  className="weather__graph">
+    <div className="weather__graph">
       <Line
-        // ref={lineRef}
-        id='canvas'
         height={100}
         overflow={true}
-        data={chartData}
+        data={data}
         options={{
           scales: {
             yAxes: [
