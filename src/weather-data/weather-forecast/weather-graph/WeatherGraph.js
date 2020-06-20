@@ -1,4 +1,4 @@
-import React, { useContext, useState, useEffect } from "react";
+import React, { useContext, useState, useEffect,useRef } from "react";
 import Context from "context";
 import "./WeatherGraph.css";
 import { Line } from "react-chartjs-2";
@@ -9,17 +9,12 @@ export default function WeatherGraph() {
   const arrTemp = [];
   const arrTime = [];
   const arrHumidity = [];
-  const arrRain = []
-  const arrСlouds = []
-
-
- 
-
+  const arrRain = [];
+  const arrСlouds = [];
+  const arrVisualTime = [];
+  // const lineRef = useRef()
+  // console.log(lineRef.current)
   dataWeatherForecast.list.forEach((item) => {
-    arrTemp.push(item.main.temp);
-    arrСlouds.push(item.clouds.all);
-    arrRain.push(item.rain ? item.rain['3h'] : 0)
-    arrHumidity.push(item.main.humidity);
     arrTime.push(
       new Date(item.dt_txt).toLocaleString("ru", {
         day: "numeric",
@@ -30,46 +25,87 @@ export default function WeatherGraph() {
     );
   });
 
+ 
 
-  const nowTime = new Date().toLocaleString("ru", {
-    day: "numeric",
-    month: "numeric"
-   })
+  const currentTime = new Date();
+  const arrNextDay = [];
+  for (let i = 0; i <= 5; i++) {
+    arrNextDay.push(currentTime.getDate() + i);
+  }
 
-  const arrDate = []
+  const arrDate = arrTime.map((item) => item.split("."));
+  const newArr = [[], [], [], [], [], []];
+  const parent = dataWeatherForecast.list;
+  for (let j = 0; j < arrDate.length; j++) {
+    for (let y = 0; y <= 5; y++) {
+      if (+arrDate[j][0] === arrNextDay[y]) {
+        newArr[y].push({
+          temp: parent[j].main.temp,
+          clouds: parent[j].clouds.all,
+          rain: parent[j].rain ? parent[j].rain["3h"] : 0,
+          humidity: parent[j].main.humidity,
+          time: parent[j].dt_txt,
+        });
+      }
+    }
+  }
 
-  arrTime.map(item => {
-    arrDate.push(item.split(','))
-  })
-  
-  const arrGraph = []
-  let count = 0
-  arrDate.map(item=>{
-    item[0] !== nowTime ? arrGraph.push(item) : count++
-  })
+  newArr.forEach((item) => {
+    let temperature = 0;
+    let humidity = 0;
+    let rain = 0;
+    let clouds = 0;
+    item.forEach((arr) => {
+      temperature += arr.temp;
+      clouds += arr.clouds;
+      rain += arr.rain;
+      humidity += arr.humidity;
+    });
+    arrTemp.push(temperature / item.length);
+    arrHumidity.push(humidity / item.length);
+    arrRain.push(rain / item.length);
+    arrСlouds.push(clouds / item.length);
+    arrVisualTime.push(
+      new Date(item[0].time).toLocaleString("ru", {
+        day: "numeric",
+        month: "numeric",
+      })
+    );
+  });
 
-  arrTime.splice(0,count)
-  arrTemp.splice(0,count)
-  arrСlouds.splice(0,count)
-  arrRain.splice(0,count)
-  arrHumidity.splice(0,count)
+
+    
 
   const chart = () => {
+    const ctx = document.getElementById('canvas').getContext("2d")
+    const gradient = ctx.createLinearGradient(0,0,800,0)
+    gradient.addColorStop(0, 'rgba(100,155,200,0.5)')
+    gradient.addColorStop(1,'rgba(250,155,100,0.5)')
+
+    const gradient1 = ctx.createLinearGradient(0,0,800,0)
+    gradient1.addColorStop(0, 'rgba(126, 228, 246, 0.6)')
+    gradient1.addColorStop(1,'rgba(246,228,1226,0.6)')
+
+    const gradient2 = ctx.createLinearGradient(0,0,800,0)
+    gradient2.addColorStop(0, 'rgba(101, 124, 226, 0.6)')
+    gradient2.addColorStop(1, 'rgba(50,50,50,0.5)')
+
+
     setChartData({
-      labels: arrTime,
+      labels: arrVisualTime,
       datasets: [
         {
           label: "temp °C",
           data: arrTemp,
-          backgroundColor: ["rgba(193, 211, 221, 0.5)"],
+          backgroundColor: gradient,
           borderWidth: 4,
           borderColor: ["rgba(209, 100, 100, 0.5)"],
           pointBorderColor: "rgba(209, 100, 100, 0.5)",
-        },
+        }, 
         {
           label: "Сlouds %",
           data: arrСlouds,
-          backgroundColor: ["rgba(126, 228, 246, 0.472)"],
+          backgroundColor: gradient1,
           borderWidth: 4,
           borderColor: ["rgba(87, 251, 109, 0.472)"],
           pointBorderColor: "rgba(87, 251, 109, 0.472)",
@@ -77,7 +113,7 @@ export default function WeatherGraph() {
         {
           label: "Humidity %",
           data: arrHumidity,
-          backgroundColor: ["rgba(100, 100, 100, 0.5)"],
+          backgroundColor: gradient2,
           borderWidth: 4,
           borderColor: ["rgba(100, 100, 200, 0.5)"],
           pointBorderColor: "rgba(109, 100, 200, 0.5)",
@@ -99,8 +135,10 @@ export default function WeatherGraph() {
   }, [dataWeatherForecast]);
 
   return (
-    <div className="weather__graph">
+    <div  className="weather__graph">
       <Line
+        // ref={lineRef}
+        id='canvas'
         height={100}
         overflow={true}
         data={chartData}
