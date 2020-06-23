@@ -3,6 +3,8 @@ import WeatherInfoTeperature from './weather-info-temerature/WeatherInfoTeperatu
 import WeatherInfoFull from './weather__info-full/WeatherInfoFull'
 import './WeatherInfoDay.css'
 
+
+
 export default function WeatherInfoDay(){
     
     let currentDay = new Date().toLocaleString('ru', { day: 'numeric', month: 'long', weekday: 'long' })

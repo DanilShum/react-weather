@@ -1,10 +1,11 @@
-import React, { useContext } from "react";
-import Context from "context";
+import React from "react";
 import "./WeatherGraph.css";
 import { Line } from "react-chartjs-2";
+import { putStateToProps, putActionToProps } from "store/putToProps";
+import { connect } from "react-redux";
 
-export default function WeatherGraph() {
-  const { dataWeatherForecast } = useContext(Context);
+function WeatherGraph(props) {
+  const dataWeatherForecast = props.dataWeatherForecast;
 
   const arrTemp = [];
   const arrTime = [];
@@ -71,7 +72,6 @@ export default function WeatherGraph() {
   });
 
   const data = (canvas) => {
-    console.log(canvas)
     const ctx = canvas.getContext("2d");
     const gradient = ctx.createLinearGradient(0, 0, 800, 0);
     gradient.addColorStop(0, "rgba(100,155,200,0.5)");
@@ -150,3 +150,4 @@ export default function WeatherGraph() {
     </div>
   );
 }
+export default connect(putStateToProps, putActionToProps)(WeatherGraph);

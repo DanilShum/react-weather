@@ -1,11 +1,12 @@
-import React, { useContext } from "react";
+import React from "react";
 import WeatherCard from "./weather-card/WeatherCard";
 import WeatherGraph from "./weather-graph/WeatherGraph";
-import Context from "context";
-import './WeatherForecast.css'
+import "./WeatherForecast.css";
+import { putStateToProps, putActionToProps } from "store/putToProps";
+import { connect } from "react-redux";
 
-export default function WeatherForecast() {
-  const { dataWeatherForecast} = useContext(Context);
+function WeatherForecast(props) {
+  const dataWeatherForecast = props.dataWeatherForecast;
 
   return (
     <section className="weather__forecast-info">
@@ -15,7 +16,9 @@ export default function WeatherForecast() {
           <WeatherCard {...item} key={item.dt} />
         ))}
       </div>
-        <WeatherGraph/>
+      <WeatherGraph />
     </section>
   );
 }
+
+export default connect(putStateToProps, putActionToProps)(WeatherForecast);
